@@ -104,7 +104,7 @@ public class Main {
 	}
 
 	private void update() {
-		
+		state.update();
 	}
 
 	private void processInput() {

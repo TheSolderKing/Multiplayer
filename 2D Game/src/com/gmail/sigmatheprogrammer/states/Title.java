@@ -1,11 +1,8 @@
 package com.gmail.sigmatheprogrammer.states;
 
 import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
-import java.awt.geom.Rectangle2D;
 
 import com.gmail.sigmatheprogrammer.util.Button;
 import com.gmail.sigmatheprogrammer.util.KeyHandler;
@@ -27,7 +24,9 @@ public class Title implements State {
 	}
 	
 	public void update() {
-		
+		if(b.isPressed()) {
+			main.setState(new Play());
+		}
 	}
 	public void processInput(MouseHandler m,KeyHandler k) {
 		b.processInput(m);

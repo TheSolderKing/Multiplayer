@@ -21,12 +21,17 @@ public class Button {
 		g.drawImage(img, x, y, width, height, null);
 	}
 	public void processInput(MouseHandler mh) {
+		System.out.println("process");
 		int mx = mh.getMouseX();
 		int my = mh.getMouseY();
-		if(mx>x && mx<x+width && my>y && my <y+height && mh.mousePressed()) {
+		if(mh.mousePressed()) {
 			pressed = true;
+			System.out.println("Pressed");
 		} else {
 			pressed = false;
 		}
+	}
+	public boolean isPressed() {
+		return pressed;
 	}
 }
