@@ -28,7 +28,7 @@ public class Main {
 	KeyHandler khandler = new KeyHandler();
 	public static int width, height;
 	public boolean running = true;	
-	public State state = new Title(this);
+	public State state;
 	
 	public static void main(String[] args) {
 		new Main(); // Begin
@@ -63,6 +63,7 @@ public class Main {
 		a.setVisible(true); // Show the frame
 		width = a.getWidth();
 		height = a.getHeight();
+		state  = new Title(this);
 		// Begin the buffer
 		c.createBufferStrategy(2);
 		buffer = c.getBufferStrategy();

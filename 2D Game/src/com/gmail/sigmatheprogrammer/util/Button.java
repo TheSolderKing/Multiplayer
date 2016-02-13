@@ -2,6 +2,9 @@ package com.gmail.sigmatheprogrammer.util;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.io.File;
+
+import javax.imageio.ImageIO;
 
 public class Button {
 	int x;
