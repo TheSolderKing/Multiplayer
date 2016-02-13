@@ -1,17 +1,17 @@
-package com.gmail.sigmatheprogrammer.main;
+package com.gmail.sigmatheprogrammer.util;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferStrategy;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
+
+import com.gmail.sigmatheprogrammer.states.State;
+import com.gmail.sigmatheprogrammer.states.Title;
 
 public class Main {
 	// Set the milliseconds of delay between updates
@@ -24,10 +24,11 @@ public class Main {
 	Canvas c = new Canvas();
 	JButton exit = new JButton();
 	BufferStrategy buffer;
+	MouseHandler mhandler = new MouseHandler();
+	KeyHandler khandler = new KeyHandler();
 	public static int width, height;
-	public boolean running = true;
-	public FiniteStateMachine = new FiniteStateMachine();
-	
+	public boolean running = true;	
+	public State state = new Title(this);
 	
 	public static void main(String[] args) {
 		new Main(); // Begin
@@ -41,15 +42,9 @@ public class Main {
 		a.setIgnoreRepaint(true);
 		a.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		a.setUndecorated(true);
-		
-		MouseAdapter m = new MouseAdapter() {
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-			}
-		};
-		c.addMouseListener(m);
+		c.addMouseListener(mhandler.getMouseListener());
+		c.addMouseMotionListener(mhandler.getMouseMotionListener());
+		c.addKeyListener(khandler.getKeyListener());
 		c.setIgnoreRepaint(true);
 		
 		exit.setBackground(Color.RED);
@@ -58,9 +53,7 @@ public class Main {
 		exit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				running = false;
-				Thread.yield();
-				a.dispatchEvent(new WindowEvent(a,WindowEvent.WINDOW_CLOSING));
+				stop();
 			}
 		});
 		a.add(exit);
@@ -68,11 +61,12 @@ public class Main {
 		a.add(c);
 		a.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		a.setVisible(true); // Show the frame
+		width = a.getWidth();
+		height = a.getHeight();
 		// Begin the buffer
 		c.createBufferStrategy(2);
 		buffer = c.getBufferStrategy();
-		width = a.getWidth();
-		height = a.getHeight();
+		
 		
 		while (running) {
 			// Set current and elapsed times based on values
@@ -95,10 +89,8 @@ public class Main {
 		try {
 			// Get graphics context
 			g = buffer.getDrawGraphics();
-			// Draw background
-			g.setColor(Color.BLUE);
-			g.fillRect(0, 0, a.getWidth(), a.getHeight());
 			// Do your drawing here:
+			state.render(g);
 			if (!buffer.contentsLost())
 				// If there is a buffer, draw it
 				buffer.show();
@@ -116,11 +108,20 @@ public class Main {
 	}
 
 	private void processInput() {
-
+		state.processInput(mhandler,khandler);
 	}
 
 	private double getCurrentTime() {
 		// Not sure why I even have this here
 		return System.currentTimeMillis();
+	}
+	
+	public void setState(State s) {
+		state = s;
+	}
+	public void stop() {
+		running = false;
+		Thread.yield();
+		a.dispatchEvent(new WindowEvent(a,WindowEvent.WINDOW_CLOSING));
 	}
 }
